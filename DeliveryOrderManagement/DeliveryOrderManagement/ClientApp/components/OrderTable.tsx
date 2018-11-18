@@ -12,12 +12,16 @@ export class OrderTable extends React.Component<RouteComponentProps<{}>, FetchOr
     constructor() {
         super();
         this.state = { orderList: [], loading: true };
-        fetch('api/Employee/Index')
+        fetch('api/Order/Index')
             .then(response => response.json() as Promise<OrderData[]>)
             .then(data => {
                 this.setState({ orderList: data, loading: false });
             });
-      }
+
+        // This binding is necessary to make "this" work in the callback  
+        this.handleDelete = this.handleDelete.bind(this);
+        this.handleEdit = this.handleEdit.bind(this);
+    }
 
 
 
@@ -27,14 +31,42 @@ export class OrderTable extends React.Component<RouteComponentProps<{}>, FetchOr
             ? <p><em>Loading...</em></p>
             : this.renderOrderTable(this.state.orderList);
         return <div>
-            <h1>Order Data</h1>
-            <p>This component demonstrates fetching Order data from the server.</p>
+            <br /><br />
             <p>
-                <Link to="/addorder">Create New</Link>
+                <Link to="/addorder">Создать новый заказ</Link>
             </p>
+            <h1>Список заказов</h1>
             {contents}
         </div>;
     }
+
+
+
+    // Handle Delete request for an employee  
+    private handleDelete(id: number) {
+        if (!confirm("Вы хотите удалить заказ под номером " + id + " ?"))
+            return;
+        else {
+            fetch('api/Order/Delete/' + id, {
+                method: 'delete'
+            }).then(data => {
+                this.setState(
+                    {
+                        orderList: this.state.orderList.filter((rec) => {
+                            return (rec.id != id);
+                        })
+                    });
+            });
+        }
+    }
+    private handleEdit(id: number) {
+        this.props.history.push("/order/edit/" + id);
+    }
+
+
+
+
+
 
 
     private renderOrderTable(orderList: OrderData[]) {
@@ -42,13 +74,13 @@ export class OrderTable extends React.Component<RouteComponentProps<{}>, FetchOr
             <thead>
                 <tr>
                     <th></th>
-                    <th>Id</th>
-                    <th>SenderCity</th>
-                    <th>senderAddress</th>
-                    <th>recipientCity</th>
-                    <th>recipientAddress</th>
-                    <th>weightCargo</th>
-                    <th>atePickupCargo</th>
+                    <th>Номер заказа</th>
+                    <th>Город получателя</th>
+                    <th>Адрес получателя</th>
+                    <th>Город отправителя</th>
+                    <th>Адресс отправителя</th>
+                    <th>Вес груза</th>
+                    <th>Дата забора заказа</th>
                 </tr>
             </thead>
             <tbody>
@@ -63,6 +95,8 @@ export class OrderTable extends React.Component<RouteComponentProps<{}>, FetchOr
                         <td>{order.weightCargo}</td>
                         <td>{order.datePickupCargo}</td>
                         <td>
+                            <a className="action" onClick={(id) => this.handleEdit(order.id)}>Редактировать</a>  |
+                            <a className="action" onClick={(id) => this.handleDelete(order.id)}>Удалить</a>
                         </td>
                     </tr>
                 )}

@@ -4,7 +4,7 @@ import { Link, NavLink } from 'react-router-dom';
 import { OrderData } from './OrderTable';
 
 interface AddOrderDataState {
-
+    title: string;
     loading: boolean;
     orderData: OrderData;
 }
@@ -13,10 +13,21 @@ interface AddOrderDataState {
 export class AddOrder extends React.Component<RouteComponentProps<{}>, AddOrderDataState> {
     constructor(props) {
         super(props);
-        this.state = { loading: true, orderData: new OrderData };
-
+        this.state = { title: "", loading: true, orderData: new OrderData };
         
-        this.state = { loading: false, orderData: new OrderData };
+        var orderid = this.props.match.params["orderid"];
+        // This will set state for Edit order
+        if (orderid > 0) {
+            fetch('api/Order/Details/' + orderid)
+                .then(response => response.json() as Promise<OrderData>)
+                .then(data => {
+                    this.setState({ title: "Редактировать", loading: false, orderData: data });
+                });
+        }
+        // This will set state for Add order
+        else {
+            this.state = { title: "Создать", loading: false, orderData: new OrderData };
+        }
         /*      }
             */  // This binding is necessary to make "this" work in the callback  
 
@@ -28,8 +39,8 @@ export class AddOrder extends React.Component<RouteComponentProps<{}>, AddOrderD
         let contents = this.state.loading
             ? <p><em>Loading...</em></p>
             : this.renderCreateForm();
-        return <div>
-            <h1>Заказ</h1>
+        return <div className="center">
+            <h1>{this.state.title} Заказ</h1>
 
             <hr />
             {contents}
@@ -40,56 +51,85 @@ export class AddOrder extends React.Component<RouteComponentProps<{}>, AddOrderD
         event.preventDefault();
         const data = new FormData(event.target);
 
-      
-        fetch('api/Employee/Create', {
-            method: 'POST',
-            body: data,
-        }).then((response) => response.json())
-         .then((responseJson) => {
-             this.props.history.push("/ordertable");
-            }); 
-        //     }
+        // PUT request for Edit order
+        if (this.state.orderData.id) {
+            fetch('api/Order/Edit', {
+                method: 'PUT',
+                body: data,
+            }).then((response) => response.json())
+                .then((responseJson) => {
+                    this.props.history.push("/ordertable");
+                });
+        }
+        // POST request for Add order
+        else {
+            fetch('api/Order/Create', {
+                method: 'POST',
+                body: data,
+            }).then((response) => response.json())
+                .then((responseJson) => {
+                    this.props.history.push("/ordertable");
+                });
+        }
     }
 
     // This will handle Cancel button click event.  
     private handleCancel(e) {
         e.preventDefault();
-  //      this.props.history.push("/fetchemployee");
+        this.props.history.push("/ordertable");
     }
-
-
 
     // Returns the HTML Form to the render() method.  
     private renderCreateForm() {
         return (
             <form onSubmit={this.handleSave} >
 
-                <h2>Добавить новый заказ</h2>
+                <div className="form-group row" >
+                    <input type="hidden" name="id" value={this.state.orderData.id} />
 
-                  <p>Город отправителя</p>
-                <input type="text" name="senderCity" defaultValue={this.state.orderData.senderCity} required />
-                <p>Адрес отправителя</p>
-                <input type="text" name="senderAddress" defaultValue={this.state.orderData.senderAddress} required ></input>
+                </div>
+                <div className="form-group row" >
 
-                <p>Город получателя</p>
-                <input type="text" name="recipientCity" defaultValue={this.state.orderData.recipientCity} required ></input>
+                    <label className=" control-label col-md-12"> Город отправителя</label>
+                    <input type="text" name="senderCity" defaultValue={this.state.orderData.senderCity} required />
 
-                <p>Адрес получателя</p>
-                <input type="text" name="recipientAddress" defaultValue={this.state.orderData.recipientAddress} required ></input>
+                </div>
 
-                <p>Вес груза</p>
-                <input type="number" name="weightCargo" defaultValue={String(this.state.orderData.weightCargo)} required ></input>
+                <div className="form-group row" >
 
-                <p>Дата забора груза</p>
-                <input name="datePickupCargo" defaultValue={this.state.orderData.datePickupCargo} required ></input>
-                <br></br><br></br><br></br>
-                <button type="submit">Добавить заказ</button>
+                    <label className=" control-label col-md-12"> Адрес отправителя</label>
+                    <input type="text" name="senderAddress" defaultValue={this.state.orderData.senderAddress} required />
+                </div>
+
+                <div className="form-group row" >
+                    <label className=" control-label col-md-12">Город получателя</label>
+                    <input type="text" name="recipientCity" defaultValue={this.state.orderData.recipientCity} required />
+                </div>
+
+                <div className="form-group row" >
+                    <label className=" control-label col-md-12">Адрес получателя</label>
+                    <input type="text" name="recipientAddress" defaultValue={this.state.orderData.recipientAddress} required />
+                </div>
+
+                <div className="form-group row" >
+                    <label className=" control-label col-md-12">Вес груза</label>
+                    <input type="number" name="weightCargo" defaultValue={String(this.state.orderData.weightCargo)} required />
+                </div>
+
+                <div className="form-group row" >
+                    <label className=" control-label col-md-12">Дата забора груза</label>
+                    <input type="date" name="datePickupCargo" defaultValue={this.state.orderData.datePickupCargo} required />
+                </div>
+
                 <br></br><br></br>
+                <div className="form-group row" >
+                    <button type="submit" className="btn btn-default">{this.state.title} заказ</button>
+                    <br></br><br></br>
 
-                <button className="btn" onClick={this.handleCancel}>Cancel</button>
-
+                    <button className="btn" onClick={this.handleCancel}>Отмена</button>
+                </div>
 
             </form >
-        )
+        );
     }
 }
