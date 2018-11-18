@@ -9,7 +9,7 @@ namespace DeliveryOrderManagement.Models
 {
     public class OrderContext : DbContext
     {
-        public DbSet<Order> Order { get; set; }
+        public DbSet<Order> Orders { get; set; }
 
         public OrderContext()
         {

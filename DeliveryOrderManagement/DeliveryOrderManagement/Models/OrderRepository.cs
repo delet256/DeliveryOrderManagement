@@ -16,7 +16,7 @@ namespace DeliveryOrderManagement.Models
         {
             try
             {
-                return db.Order.ToList();
+                return db.Orders.ToList();
             }
             catch
             {
@@ -29,7 +29,7 @@ namespace DeliveryOrderManagement.Models
         {
             try
             {
-                db.Order.Add(order);
+                db.Orders.Add(order);
                 db.SaveChanges();
                 return 1;
             }
@@ -61,7 +61,7 @@ namespace DeliveryOrderManagement.Models
         {
             try
             {
-                Order employee = db.Order.Find(id);
+                Order employee = db.Orders.Find(id);
                 return employee;
             }
             catch
@@ -75,8 +75,8 @@ namespace DeliveryOrderManagement.Models
         {
             try
             {
-                Order emp = db.Order.Find(id);
-                db.Order.Remove(emp);
+                Order emp = db.Orders.Find(id);
+                db.Orders.Remove(emp);
                 db.SaveChanges();
                 return 1;
             }

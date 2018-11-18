@@ -25,12 +25,12 @@
 
   <ItemGroup>
     <None Remove="ClientApp\components\AddOrder.tsx" />
-    <None Remove="ClientApp\components\FetchOrder.tsx" />
+    <None Remove="ClientApp\components\OrderTable.tsx" />
   </ItemGroup>
 
   <ItemGroup>
     <TypeScriptCompile Include="ClientApp\components\AddOrder.tsx" />
-    <TypeScriptCompile Include="ClientApp\components\FetchOrder.tsx" />
+    <TypeScriptCompile Include="ClientApp\components\OrderTable.tsx" />
   </ItemGroup>
 
   <Target Name="DebugRunWebpack" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('wwwroot\dist') ">
