@@ -59,8 +59,7 @@ export class AddOrder extends React.Component<RouteComponentProps<{}>, AddOrderD
             fetch('api/Order/Edit', {
                     method: 'PUT',
                     body: data,
-                }).then((response) => response.json())
-                .then((responseJson) => {
+                }).then(() => {
                     this.props.history.push("/ordertable");
                 });
         }

@@ -23,10 +23,13 @@ namespace DeliveryOrderManagement.Models
         /// Add order on database
         /// </summary>
         /// <param name="order">Order for to add from database</param>
-        public void AddOrder(Order order)
+        public int AddOrder(Order order)
         {
+
             db.Orders.Add(order);
             db.SaveChanges();
+            db.Entry(order).GetDatabaseValues();
+            return order.Id;
         }
 
         /// <summary>

@@ -33,8 +33,7 @@ namespace DeliveryOrderManagement.Controllers
         [Route("api/Order/Create")]
         public int Create(Order order)
         {
-            orderRepository.AddOrder(order);
-            return 1;
+            return orderRepository.AddOrder(order);
         }
         /// <summary>
         /// Get the order
