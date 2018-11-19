@@ -10,80 +10,56 @@ namespace DeliveryOrderManagement.Models
 {
     public class OrderRepository
     {
-       OrderContext db = new OrderContext();
-
+        OrderContext db = new OrderContext();
+        /// <summary>
+        /// Get list of all orders from database
+        /// </summary>
         public IEnumerable<Order> GetAllOrders()
         {
-            try
-            {
-                return db.Orders.ToList();
-            }
-            catch
-            {
-                throw;
-            }
+            return db.Orders.ToList();
         }
 
-        //To Add new order record     
-        public int AddOrder(Order order)
+        /// <summary>
+        /// Add order on database
+        /// </summary>
+        /// <param name="order">Order for to add from database</param>
+        public void AddOrder(Order order)
         {
-            try
-            {
-                db.Orders.Add(order);
-                db.SaveChanges();
-                return 1;
-            }
-            catch
-            {
-                throw;
-            }
+            db.Orders.Add(order);
+            db.SaveChanges();
         }
 
-
-        //To Update the records of a particluar oreder   
+        /// <summary>
+        /// To Update the records of a particular order on database
+        /// </summary>
+        /// <param name="order">Order for to update from database</param>
         public int UpdateOrder(Order order)
         {
-            try
-            {
-                db.Entry(order).State = EntityState.Modified;
-                db.SaveChanges();
-                return 1;
-            }
-            catch
-            {
-                throw;
-            }
+            db.Entry(order).State = EntityState.Modified;
+            db.SaveChanges();
+            return order.Id;
         }
 
-
-        //Get the details of a particular order    
+        /// <summary>
+        /// Get the details of a particular order  on database
+        /// </summary>
+        /// <param name="id">Order number to get from database</param>
         public Order GetOrderData(int id)
         {
-            try
-            {
-                Order employee = db.Orders.Find(id);
-                return employee;
-            }
-            catch
-            {
-                throw;
-            }
+            Order employee = db.Orders.Find(id);
+            return employee;
         }
 
-        //To Delete the record of a particular order    
+        /// <summary>
+        /// To Delete the record of a particular order  
+        /// </summary>
+        /// <param name="id">order number to delete from database</param>
         public int DeleteOrder(int id)
         {
-            try
-            {
-                Order emp = db.Orders.Find(id);
-                db.Orders.Remove(emp);
-                db.SaveChanges();
-                return 1;
-            }
-            catch
-            {
-                throw;
-            }
+            Order emp = db.Orders.Find(id);
+            db.Orders.Remove(emp);
+            db.SaveChanges();
+            return id;
         }
 
 

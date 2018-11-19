@@ -5,8 +5,9 @@ import { OrderTable } from "./components/OrderTable";
 import { AddOrder } from "./components/AddOrder";
 
 
-export const routes =<Layout>
+export const routes = <Layout>
     <Route exact path='/' component={OrderTable} />
+    <Route path='/ordertable' component={OrderTable} />
     <Route path='/addorder' component={AddOrder} />
     <Route path='/order/edit/:orderid' component={AddOrder} />
 </Layout>;

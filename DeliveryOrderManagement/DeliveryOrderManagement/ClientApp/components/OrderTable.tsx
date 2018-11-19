@@ -42,7 +42,7 @@ export class OrderTable extends React.Component<RouteComponentProps<{}>, FetchOr
 
 
 
-    // Handle Delete request for an employee  
+    // Handle Delete request for an order  
     private handleDelete(id: number) {
         if (!confirm("Вы хотите удалить заказ под номером " + id + " ?"))
             return;
@@ -62,11 +62,6 @@ export class OrderTable extends React.Component<RouteComponentProps<{}>, FetchOr
     private handleEdit(id: number) {
         this.props.history.push("/order/edit/" + id);
     }
-
-
-
-
-
 
 
     private renderOrderTable(orderList: OrderData[]) {
@@ -93,7 +88,7 @@ export class OrderTable extends React.Component<RouteComponentProps<{}>, FetchOr
                         <td>{order.recipientCity}</td>
                         <td>{order.recipientAddress}</td>
                         <td>{order.weightCargo}</td>
-                        <td>{order.datePickupCargo}</td>
+                        <td>{order.datePickupCargo.substring(0,10)}</td>
                         <td>
                             <a className="action" onClick={(id) => this.handleEdit(order.id)}>Редактировать</a>  |
                             <a className="action" onClick={(id) => this.handleDelete(order.id)}>Удалить</a>
@@ -104,8 +99,6 @@ export class OrderTable extends React.Component<RouteComponentProps<{}>, FetchOr
         </table>;
     }
 }
-
-
 
 export class OrderData {
     id: number = 0;

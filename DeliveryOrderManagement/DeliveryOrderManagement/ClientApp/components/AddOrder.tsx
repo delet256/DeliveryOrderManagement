@@ -14,23 +14,25 @@ export class AddOrder extends React.Component<RouteComponentProps<{}>, AddOrderD
     constructor(props) {
         super(props);
         this.state = { title: "", loading: true, orderData: new OrderData };
-        
+
         var orderid = this.props.match.params["orderid"];
+
         // This will set state for Edit order
         if (orderid > 0) {
             fetch('api/Order/Details/' + orderid)
                 .then(response => response.json() as Promise<OrderData>)
                 .then(data => {
+                    data.datePickupCargo = data.datePickupCargo.substring(0, 10);
                     this.setState({ title: "Редактировать", loading: false, orderData: data });
                 });
+
         }
         // This will set state for Add order
         else {
             this.state = { title: "Создать", loading: false, orderData: new OrderData };
         }
-        /*      }
-            */  // This binding is necessary to make "this" work in the callback  
 
+        // This binding is necessary to make "this" work in the callback
         this.handleSave = this.handleSave.bind(this);
         this.handleCancel = this.handleCancel.bind(this);
     }
@@ -47,6 +49,7 @@ export class AddOrder extends React.Component<RouteComponentProps<{}>, AddOrderD
         </div>;
     }
 
+    // This will handle the submit form event. 
     private handleSave(event) {
         event.preventDefault();
         const data = new FormData(event.target);
@@ -54,9 +57,9 @@ export class AddOrder extends React.Component<RouteComponentProps<{}>, AddOrderD
         // PUT request for Edit order
         if (this.state.orderData.id) {
             fetch('api/Order/Edit', {
-                method: 'PUT',
-                body: data,
-            }).then((response) => response.json())
+                    method: 'PUT',
+                    body: data,
+                }).then((response) => response.json())
                 .then((responseJson) => {
                     this.props.history.push("/ordertable");
                 });
@@ -66,10 +69,9 @@ export class AddOrder extends React.Component<RouteComponentProps<{}>, AddOrderD
             fetch('api/Order/Create', {
                 method: 'POST',
                 body: data,
-            }).then((response) => response.json())
-                .then((responseJson) => {
-                    this.props.history.push("/ordertable");
-                });
+            }).then(() => {
+                this.props.history.push("/ordertable");
+            });
         }
     }
 
@@ -83,20 +85,16 @@ export class AddOrder extends React.Component<RouteComponentProps<{}>, AddOrderD
     private renderCreateForm() {
         return (
             <form onSubmit={this.handleSave} >
-
                 <div className="form-group row" >
                     <input type="hidden" name="id" value={this.state.orderData.id} />
-
                 </div>
-                <div className="form-group row" >
 
+                <div className="form-group row" >
                     <label className=" control-label col-md-12"> Город отправителя</label>
                     <input type="text" name="senderCity" defaultValue={this.state.orderData.senderCity} required />
-
                 </div>
 
                 <div className="form-group row" >
-
                     <label className=" control-label col-md-12"> Адрес отправителя</label>
                     <input type="text" name="senderAddress" defaultValue={this.state.orderData.senderAddress} required />
                 </div>
@@ -125,10 +123,8 @@ export class AddOrder extends React.Component<RouteComponentProps<{}>, AddOrderD
                 <div className="form-group row" >
                     <button type="submit" className="btn btn-default">{this.state.title} заказ</button>
                     <br></br><br></br>
-
                     <button className="btn" onClick={this.handleCancel}>Отмена</button>
                 </div>
-
             </form >
         );
     }
