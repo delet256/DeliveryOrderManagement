@@ -88,7 +88,7 @@ export class OrderTable extends React.Component<RouteComponentProps<{}>, FetchOr
                         <td>{order.recipientCity}</td>
                         <td>{order.recipientAddress}</td>
                         <td>{order.weightCargo}</td>
-                        <td>{order.datePickupCargo.substring(0,10)}</td>
+                        <td>{order.datePickupCargo}</td>
                         <td>
                             <a className="action" onClick={(id) => this.handleEdit(order.id)}>Редактировать</a>  |
                             <a className="action" onClick={(id) => this.handleDelete(order.id)}>Удалить</a>

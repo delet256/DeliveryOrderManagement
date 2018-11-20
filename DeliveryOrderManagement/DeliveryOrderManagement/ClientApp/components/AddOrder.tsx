@@ -22,7 +22,6 @@ export class AddOrder extends React.Component<RouteComponentProps<{}>, AddOrderD
             fetch('api/Order/Details/' + orderid)
                 .then(response => response.json() as Promise<OrderData>)
                 .then(data => {
-                    data.datePickupCargo = data.datePickupCargo.substring(0, 10);
                     this.setState({ title: "Редактировать", loading: false, orderData: data });
                 });
 
