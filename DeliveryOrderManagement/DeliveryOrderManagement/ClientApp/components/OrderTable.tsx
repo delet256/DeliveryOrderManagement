@@ -90,8 +90,8 @@ export class OrderTable extends React.Component<RouteComponentProps<{}>, FetchOr
                         <td>{order.weightCargo}</td>
                         <td>{order.datePickupCargo}</td>
                         <td>
-                            <a className="action" onClick={(id) => this.handleEdit(order.id)}>Редактировать</a>  |
-                            <a className="action" onClick={(id) => this.handleDelete(order.id)}>Удалить</a>
+                            <a className="action" onClick={() => this.handleEdit(order.id)}>Редактировать</a>  |
+                            <a className="action" onClick={() => this.handleDelete(order.id)}>Удалить</a>
                         </td>
                     </tr>
                 )}
